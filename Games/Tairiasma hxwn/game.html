@@ -1,0 +1,269 @@
+<!-- saved from url=(0022)http://internet.e-mail -->
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
+<title>{{title}}</title>
+
+<meta name="description" content=""/>
+<meta name="keywords" content="" />
+<meta name="robots" content="index,follow" />
+<meta name="generator" content="TORUS internet applications - http://www.torus.gr" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+
+<style>
+div {
+	text-align: center;
+}
+.photo {
+	display: inline-block;
+	width: 300px;
+	height: 200px;
+	margin: 15px;
+	border: 2px solid transparent;
+	cursor: pointer;
+	transition: all .3s;
+}
+.photo:hover {
+	border-color: #ff0000;
+}
+.photos {
+	max-width: 990px;
+	margin: 0 auto;
+}
+.counter {
+	font-size: 40px;
+}
+
+button {
+	color: #ffffff;
+	background: #005588;
+	padding: 8px 15px;
+	border: 0;
+	font-weight: bold;
+	font-size: 16px;
+	transition: all .3s;
+}
+button:hover {
+	background: #aa0000;
+}
+.success, .failed {
+	display: none;
+}
+</style>
+
+</head>
+
+<body>
+<header>
+	<nav>
+	</nav>
+</header>
+
+<main>
+	<div class="form">
+		<button class="btn-init" onclick="init(-1)">Παίξε</button>
+	</div>
+	<div class="stage">
+		<div class="counter"></div>
+		<div class="sound"></div>
+		<div class="photos"></div>
+	</div>
+	
+	<div class="success">
+		<h1>Μπράβο!!!</h1>
+		<p>Απάντησες σωστά σε <span class="answers"></span> ερωτήσεις</p>
+		<p>Χρόνος που απέμεινε: <span class="time"></span></p>
+		<p>Πόντοι: <span class="points"></span></p>
+		<button class="btn-init" onclick="init(-1)">Ξαναπαίξε</button>
+	</div>
+	<div class="failed">
+		<h1>Βλάκα!!!</h1>
+		<p>Απάντησες σωστά σε <span class="answers"></span> ερωτήσεις</p>
+		<p>Χρόνος που απέμεινε: <span class="time"></span></p>
+		<p>Πόντοι: <span class="points"></span></p>
+		<button class="btn-init" onclick="init(-1)">Ξαναπαίξε</button>
+	</div>
+</main>
+
+<footer>
+	<div class="signature">
+	</div>
+</footer>
+
+<script>
+var level = 1;
+if(location.search.length)
+	level = parseInt(location.search.substr(1).split('=')[1]);
+//console.log(location.search.substr(1));
+var timeFunc = null;
+var roundFunc = null;
+var gameover= false;
+var maxTime = 0;
+var lives = 0;
+var round = 0;
+var result = null;
+var answers = 0;
+
+var sounds_original = ['airplane.mp3', 'bells.mp3', 'cat.mp3', 'cow.mp3', 'dog.mp3', 'duck.mp3', 'elephant.mp3', 'ferrari.mp3', 'guitar.mp3', 'horse.mp3', 'lion.mp3', 'parrot.mp3', 'piano.mp3', 'rooster.mp3', 'wolf.mp3'];
+var images_original = ['airplane.jpg', 'bells.jpg', 'cat.jpg', 'cow.jpg', 'dog.jpg', 'duck.jpg', 'elephant.jpg', 'ferrari.jpg', 'guitar.jpg', 'horse.jpg', 'lion.jpg', 'parrot.jpg', 'piano.jpg', 'rooster.jpg', 'wolf.jpg'];
+
+var options = [
+	{
+		level: 1,
+		rounds: 3,
+		images: 6,
+		points: 10
+	},
+	{
+		level: 2,
+		rounds: 3,
+		images: 9,
+		points: 20
+	},
+	{
+		level: 3,
+		rounds: 3,
+		images: 12,
+		points: 40
+	},
+	{
+		level: 4,
+		rounds: 4,
+		images: [6,6,9,9],
+		points: 60
+	},
+	{
+		level: 5,
+		rounds: 6,
+		images: [6,6,9,9,12,12],
+		points: 80
+	}
+];
+
+var data = {
+		sound: '',
+		correctImage: '',
+		selectedImages: []
+}
+
+function setupValues() {
+	// Select a index from 0 to sounds.length - 1
+	var sounds = [];
+	var images = [];
+
+	// Make a copy of sounds array
+	for(var i=0; i<sounds_original.length; i++) {
+		sounds.push(sounds_original[i]);
+	}
+	var idx = Math.floor(Math.random() * sounds.length);
+
+	data.sound = sounds.splice(idx,1)[0];
+	data.correctImage = data.sound.replace('.mp3', '.jpg');
+	data.selectedImages = [];
+
+	// Make a copy of images array
+	for(i=0; i<images_original.length; i++) {
+		images.push(images_original[i]);
+	}
+	
+	// Add the correct image as first array element
+	data.selectedImages.push(data.correctImage);
+	
+	// Remove the correct image from available images
+	for(i=0; i<images.length; i++){
+		if(images[i] == data.correctImage)
+			images.splice(i,1);
+	}
+	
+	// Choose random images from the available images array
+	var imgnumber = 0;
+	if(level>3)
+		imgnumber = options[level-1].images[round];
+	else
+		imgnumber = options[level-1].images;
+	console.log(imgnumber);
+	while(data.selectedImages.length < imgnumber) {
+		idx = Math.floor(Math.random() * images.length);
+		data.selectedImages.push(images[idx]);
+		images.splice(idx,1);
+	}
+	console.log(data.sound + ' ' + data.selectedImages.length);
+}
+
+function counter() {
+	maxTime -= 10;
+	$('.counter').html(Math.round(maxTime / 1000));
+	// Check if the game is over
+//	console.log(maxTime + ' ' + lives + ' ' + round + ' ' + options[level-1].rounds);
+	gameover = maxTime <= 0 || lives == 0 || round == options[level-1].rounds;
+	if(gameover) {
+		result = maxTime && lives;
+		clearInterval(roundFunc);
+		clearInterval(timeFunc);
+		displayResults();
+	}
+}
+
+function displayResults() {
+	$('.stage > div').html('');
+	var container = (result ? '.success' : '.failed');
+	$(container).find('.time').html(Math.round(maxTime/1000));
+	var points = options[level-1].points;
+//	points = points * (1 - (30000 - maxTime) / 30000);
+	points = points * maxTime / 30000;
+	$(container).find('.points').html(points);
+	$(container).find('.answers').html(answers);
+	$(container).show();
+}
+
+function playRound(r) {
+	var idx;
+	setupValues();
+	new Audio(data.sound).play();
+	while( data.selectedImages.length ) {
+		idx = Math.floor(Math.random() * data.selectedImages.length);
+		$('.photos').append('<img class="photo" src="' + data.selectedImages[idx] + '" />');
+		data.selectedImages.splice(idx,1);
+	}
+	$('.photos img').click( function(e) {
+		var imgName = $(e.target).attr('src');
+		if(data.sound == imgName.replace('jpg', 'mp3')) {
+			// success
+			answers++
+		} else {
+			lives--;
+		}
+		round++;
+		init(round);
+
+	});
+}
+
+function init(r){
+
+	$('.form').remove();
+	$('.stage > div').html('');
+	$('.success, .failed').hide();
+
+	if(r == -1) {
+		round = 0;
+		lives = 3;
+		maxTime = 30000;
+		result = null;
+		answers = 0;
+		timeFunc = setInterval('counter()', 10);
+	}
+	roundFunc = setTimeout('playRound(' + round + ')', 15);
+}
+
+//window.addEventListener('load', init());
+</script>
+
+</body>
+</html>
