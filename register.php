@@ -116,16 +116,16 @@ if (
                   <!-- Default inline 4-->
                   <div class="custom-control custom-radio custom-control-inline">
                     <input type="radio" class="custom-control-input" id="difficulty4" name="difficulty">
-                    <label class="custom-control-label" for="difficulty4">Gradual (Easy - Advanced)</label>
+                    <label class="custom-control-label" for="difficulty4">Gradual (Easy - Intermediate)</label>
                   </div>
 
                   <!-- Default inline 5-->
                   <div class="custom-control custom-radio custom-control-inline">
                     <input type="radio" class="custom-control-input" id="difficulty5" name="difficulty">
-                    <label class="custom-control-label" for="difficulty5">Gradual (Easy - Intermediate)</label>
+                    <label class="custom-control-label" for="difficulty5">Gradual (Easy - Advanced)</label>
                   </div>
 
-                  <div id="error" class="form-label-group text-center" style="color:red;">
+                  <div id="error" class="form-label-group text-center">
                   </div>
 
                   <button class="btn btn-lg btn-primary btn-block" onclick="registerCredentials()">Register</button>
@@ -158,10 +158,12 @@ if (
         document.getElementById("error").innerHTML = "Please complete all fields!!";
         return;
       }
+
       if (document.getElementById("password").value != document.getElementById("conf_password").value) {
         document.getElementById("error").innerHTML = "Passwords do not match!!";
         return;
       }
+
       var username = document.getElementById("username").value;
       var password = document.getElementById("password").value;
       var gender = document.getElementById("gender").value;
@@ -172,18 +174,21 @@ if (
       if (document.getElementById("difficulty1").checked) difficulty = 1;
       else if (document.getElementById("difficulty2").checked) difficulty = 2;
       else if (document.getElementById("difficulty3").checked) difficulty = 3;
-      else if (document.getElementById("difficulty2").checked) difficulty = 4;
-      else if (document.getElementById("difficulty3").checked) difficulty = 5;
+      else if (document.getElementById("difficulty4").checked) difficulty = 4;
+      else if (document.getElementById("difficulty5").checked) difficulty = 5;
       else {
         document.getElementById("error").innerHTML = "Invalid difficulty!!";
         return;
       }
+
       var xhttp = new XMLHttpRequest();
       xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
           document.getElementById("error").innerHTML = this.responseText;
           if (document.getElementById("error").innerHTML.trim() == "Success") {
             location.href = '.';
+          } else {
+            document.getElementById("error").style.color = "Red";
           }
         }
       };

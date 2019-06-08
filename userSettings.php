@@ -29,7 +29,7 @@ session_start();
 //     $query = "update user set education=''$_POST["education"]'' where username=''$_POST["username"]''"; 
 // }
 // if (!empty($_POST["difficulty"])){
-//     $query = "update user set difficulty=''$_POST["difficulty"]'' where username=''$_POST["username"]''"; 
+//     $query = "update user set difficulty='.$_POST['difficulty'].' where username='.$_POST['username'].'"; 
 // }
 
 // $result = mysqli_query($link, $query);
@@ -46,19 +46,19 @@ session_start();
 
 if (
   isset($_SESSION["username"]) &&
-  isset($_POST["password"]) &&
   isset($_POST["new_password"]) &&
   isset($_POST["gender"]) &&
   isset($_POST["city"]) &&
   isset($_POST["birthday"]) &&
   isset($_POST["education"]) &&
-  isset($_POST["difficulty"])
+  isset($_POST["difficulty"]) &&
+  isset($_POST["old_password"]) 
 ) {
   $username = mysqli_real_escape_string($link, $_SESSION['username']);
-  $password = mysqli_real_escape_string($link, $_POST['password']);
+  $password = mysqli_real_escape_string($link, $_POST['old_password']);
 
-  $sql = "SELECT 1 FROM user WHERE username='$username' and password='$password'";
-  $result = mysqli_query($link, $sql) or die(mysqli_error($link));
+  $query = "SELECT 1 FROM user WHERE username='$username' and password='$password'";
+  $result = mysqli_query($link, $query) or die(mysqli_error($link));
   $count = mysqli_num_rows($result);
 
   if ($count != 1) {
@@ -67,42 +67,42 @@ if (
   }
 
   $flag = false;
-  $sql = "UPDATE user SET ";
+  $query = "UPDATE user SET ";
 
   $new_password = mysqli_real_escape_string($link, $_POST['new_password']);
   if (!empty($new_password)) {
-    $sql = $sql."password = '$new_password', ";
-    flag = true;
+    $query = $query."password = '$new_password', ";
+    $flag = true;
   }
 
   $gender = mysqli_real_escape_string($link, $_POST['gender']);
   if (!empty($gender)) {
-    $sql = $sql."gender = '$gender', ";
-    flag = true;
+    $query = $query."gender = '$gender', ";
+    $flag = true;
   }
 
   $city = mysqli_real_escape_string($link, $_POST['city']);
   if (!empty($city)) {
-    $sql = $sql."city = '$city', ";
-    flag = true;
+    $query = $query."city = '$city', ";
+    $flag = true;
   }
 
   $birthday = mysqli_real_escape_string($link, $_POST['birthday']);
   if (!empty($birthday)) {
-    $sql = $sql."birthday = '$birthday', ";
-    flag = true;
+    $query = $query."birthdate = '$birthday', ";
+    $flag = true;
   }
 
   $education = mysqli_real_escape_string($link, $_POST['education']);
   if (!empty($education)) {
-    $sql = $sql."education = '$education', ";
-    flag = true;
+    $query = $query."education = '$education', ";
+    $flag = true;
   }
 
   $difficulty = mysqli_real_escape_string($link, $_POST['difficulty']);
   if (!empty($difficulty)) {
-    $sql = $sql."difficulty = '$difficulty', ";
-    flag = true;
+    $query = $query."difficulty = '$difficulty', ";
+    $flag = true;
   }
 
   if (!$flag) {
@@ -110,12 +110,12 @@ if (
     exit();
   }
 
-  if (substr($sql, -2) == ", ") $sql = substr($sql, 0, -2);
-  sql += " WHERE username='$username'";
+  if (substr($query, -2) == ", ") $query = substr($query, 0, -2);
+  $query = $query." WHERE username='$username'";
 
   mysqli_autocommit($link, false);
 
-  $result = mysqli_query($link, $sql) or die(mysqli_error($link));
+  $result = mysqli_query($link, $query) or die(mysqli_error($link));
 
   if ($result) {
     mysqli_commit($link);
@@ -127,8 +127,8 @@ if (
 } elseif (isset($_SESSION["username"])) {
   $username = mysqli_real_escape_string($link, $_SESSION['username']);
 
-  $sql = "SELECT * FROM user WHERE username='$username'";
-  $result = mysqli_query($link, $sql) or die(mysqli_error($link));
+  $query = "SELECT * FROM user WHERE username='$username'";
+  $result = mysqli_query($link, $query) or die(mysqli_error($link));
   $row=mysqli_fetch_array($result);
   ?>
 
@@ -214,26 +214,26 @@ if (
           <div class="custom-control custom-radio custom-control-inline">
             <input type="radio" class="custom-control-input" id="difficulty4" name="difficulty"
             <?php if ($row["difficulty"] == 4) echo 'checked="true"';?>>
-            <label class="custom-control-label" for="difficulty4">Gradual (Easy - Advanced)</label>
+            <label class="custom-control-label" for="difficulty4">Gradual (Easy - Intermediate)</label>
           </div>
 
           <!-- Default inline 5-->
           <div class="custom-control custom-radio custom-control-inline">
             <input type="radio" class="custom-control-input" id="difficulty5" name="difficulty"
             <?php if ($row["difficulty"]== 5) echo 'checked="true"';?>>
-            <label class="custom-control-label" for="difficulty5">Gradual (Easy - Intermediate)</label>
+            <label class="custom-control-label" for="difficulty5">Gradual (Easy - Advanced)</label>
           </div>
         </div>
 
-        <div id="error" class="form-label-group text-center" style="color:red;">
+        <div id="error" class="form-label-group text-center">
         </div>
 
         <div class="form-label-group">
-          <input type="password" id="password" class="form-control" placeholder="Password" required>
-          <label for="password">Confirm Current Password</label>
+          <input type="password" id="old_password" class="form-control" placeholder="Password" required autofocus>
+          <label for="old_password">Confirm Current Password</label>
         </div>
 
-        <button class="btn btn-lg btn-primary btn-block" onclick="registerCredentials()">Update Info</button>
+        <button class="btn btn-lg btn-primary btn-block" onclick="updateProfile()">Update Info</button>
       </div>
     </div>
   </div>
@@ -243,3 +243,4 @@ if (
   header("Location: index.php");
 }
 ?>
+

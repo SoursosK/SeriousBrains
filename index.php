@@ -66,8 +66,8 @@ if (!isset($_SESSION["username"])) {
                 <?php echo $_SESSION['username'] ?>
               </a>
               <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" onclick="user_settings()">User Settings</a>
-                <a class="dropdown-item">Another action</a>
+                <a class="dropdown-item" onclick="userSettings()">User Settings</a>
+                <a class="dropdown-item" onclick="review()">Review Website</a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item">Something else here</a>
               </div>
@@ -116,7 +116,7 @@ if (!isset($_SESSION["username"])) {
   </script>
 
   <script>
-    function user_settings() {
+    function userSettings() {
       var xhttp = new XMLHttpRequest();
       xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
@@ -127,8 +127,64 @@ if (!isset($_SESSION["username"])) {
         }
       };
 
-      xhttp.open("GET", "user_settings.php", true);
+      xhttp.open("GET", "userSettings.php", true);
       xhttp.send();
+    }
+  </script>
+
+  <script>
+    function review() {
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          document.getElementById("content").innerHTML = this.responseText;
+        }
+      };
+
+      xhttp.open("GET", "form.html", true);
+      xhttp.send();
+    }
+  </script>
+
+  <script>
+    function updateProfile() {
+      if (document.getElementById("new_password").value != document.getElementById("conf_password").value) {
+        document.getElementById("error").innerHTML = "Passwords do not match!!";
+        return;
+      }
+
+      //var username = $_SESSION["username"];
+      var new_password = document.getElementById("new_password").value;
+      var gender = document.getElementById("gender").value;
+      var city = document.getElementById("city").value;
+      var birthday = document.getElementById("birthday").value;
+      var education = document.getElementById("education").value;
+      var difficulty;
+      if (document.getElementById("difficulty1").checked) difficulty = 1;
+      else if (document.getElementById("difficulty2").checked) difficulty = 2;
+      else if (document.getElementById("difficulty3").checked) difficulty = 3;
+      else if (document.getElementById("difficulty4").checked) difficulty = 4;
+      else if (document.getElementById("difficulty5").checked) difficulty = 5;
+      else {
+        document.getElementById("error").innerHTML = "Invalid difficulty!!";
+        return;
+      }
+      var old_password = document.getElementById("old_password").value;
+
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          document.getElementById("error").innerHTML = this.responseText;
+          if (document.getElementById("error").innerHTML.trim() == "Success")
+            document.getElementById("error").style.color = "LimeGreen";
+          else
+            document.getElementById("error").style.color = "Red";
+        }
+      };
+
+      xhttp.open("POST", "userSettings.php", true);
+      xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      xhttp.send("new_password=" + new_password + "&gender=" + gender + "&city=" + city + "&birthday=" + birthday + "&education=" + education + "&difficulty=" + difficulty + "&old_password=" + old_password);
     }
   </script>
 

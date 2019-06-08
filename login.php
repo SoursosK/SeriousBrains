@@ -43,7 +43,7 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
                   <label for="password">Password</label>
                 </div>
 
-                <div id="error" class="form-label-group text-center" style="color:red;">
+                <div id="error" class="form-label-group text-center">
                 </div>
                 <button class="btn btn-lg btn-primary btn-block" onclick="checkCredentials()">Sign in</button>
                 <hr class="my-4">
@@ -68,6 +68,7 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
             location.href = '.';
           } else {
             document.getElementById("error").innerHTML = response;
+            document.getElementById("error").style.color = "Red";
           }
         }
       };
