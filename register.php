@@ -89,7 +89,7 @@ if (
                   <label for="education">Education</label>
                 </div>
 
-                <div class="form-label-group" id="difficulty">
+                <div class="form-label-group text-center" id="difficulty">
 
                   <div class="custom-control custom-control-inline">
                     <label>Select difficulty:</label>
