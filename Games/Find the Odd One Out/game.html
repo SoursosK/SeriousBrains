@@ -32,7 +32,7 @@ div {
 .photo:hover {
 	border-color: #ff0000;
 }
-.photos {
+.Photos {
 	max-width: 990px;
 	margin: 0 auto;
 }
@@ -67,27 +67,27 @@ button:hover {
 
 <main>
 	<div class="form">
-		<button class="btn-init" onclick="init(-1)">Παίξε</button>
+		<button class="btn-init" onclick="init(-1)">Play</button>
 	</div>
 	<div class="stage">
 		<div class="counter"></div>
 		<div class="sound"></div>
-		<div class="photos"></div>
+		<div class="Photos"></div>
 	</div>
 	
 	<div class="success">
-		<h1>Μπράβο!!!</h1>
-		<p>Απάντησες σωστά σε <span class="answers"></span> ερωτήσεις</p>
-		<p>Χρόνος που απέμεινε: <span class="time"></span></p>
-		<p>Πόντοι: <span class="points"></span></p>
-		<button class="btn-init" onclick="init(-1)">Ξαναπαίξε</button>
+		<h1>Well done!!!</h1>
+		<p>You answered right in <span class="answers"></span> questions!</p>
+		<p>Time left <span class="time"></span> seconds</p>
+		<p>Points: <span class="points"></span></p>
+		<button class="btn-init" onclick="init(-1)">Play Again</button>
 	</div>
 	<div class="failed">
-		<h1>Βλάκα!!!</h1>
-		<p>Απάντησες σωστά σε <span class="answers"></span> ερωτήσεις</p>
-		<p>Χρόνος που απέμεινε: <span class="time"></span></p>
-		<p>Πόντοι: <span class="points"></span></p>
-		<button class="btn-init" onclick="init(-1)">Ξαναπαίξε</button>
+		<h1>Let's try it again! You can do better!!</h1>
+		<p>You answered right in <span class="answers"></span> questions!</p>
+		<p>Time left <span class="time"></span> seconds</p>
+		<p>Points: <span class="points"></span></p>
+		<button class="btn-init" onclick="init(-1)">Play Again</button>
 	</div>
 </main>
 
@@ -110,19 +110,19 @@ var round = 0;
 var result = null;
 var answers = 0;
 
-var game1 = {
+var game = {
 	
 	data: [
 			{
-				folder: 'fruit',
+				folder: 'Fruit',
 				choices: ['apple.jpg', 'banana.jpg', 'cherry.jpg', 'strawberry.jpg', 'orange.jpg']
 			},
 			{
-				folder: 'animals',
+				folder: 'Animals',
 				choices: ['cat.jpg', 'dog.jpg', 'rooster.jpg', 'horse.jpg', 'cow.jpg']
 			},
 			{
-				folder: 'transportation',
+				folder: 'Transportation',
 				choices: ['bike.jpg', 'bus.jpg', 'car.jpg', 'motorcycle.jpg', 'train.jpg']
 			}
 	],
@@ -187,12 +187,12 @@ function setupValues() {
 	else
 		difficulty = options[level-1].stages;
 	
-	data.correctImage = game1.wrong[difficulty][round%3];
+	data.correctImage = game.wrong[difficulty][round%3];
 	images.push(data.correctImage);
 	
 	
 	// Make a copy of images array
-	images = images.concat(game1.data[round%3].choices);
+	images = images.concat(game.data[round%3].choices);
 
 	while(data.selectedImages.length < 6) {
 		idx = Math.floor(Math.random() * images.length);
@@ -236,15 +236,15 @@ function playRound(r) {
 	
 	while( data.selectedImages.length ) {
 		idx = Math.floor(Math.random() * data.selectedImages.length);
-		$('.photos').append('<img class="photo" src="photos\\'+ game1.data[r%3].folder + '\\' +
+		$('.Photos').append('<img class="photo" src="Photos\\'+ game.data[r%3].folder + '\\' +
 			data.selectedImages[idx] + '" />');
 		data.selectedImages.splice(idx,1);
 		
 	}
-	$('.photos img').click( function(e) {
+	$('.Photos img').click( function(e) {
 		var imgName = $(e.target).attr('src').split('\\').reverse()[0];
-		console.log(imgName + ' ' + game1.wrong[difficulty][r%3]);
-		if(game1.wrong[difficulty][r%3] == imgName) {
+		console.log(imgName + ' ' + game.wrong[difficulty][r%3]);
+		if(game.wrong[difficulty][r%3] == imgName) {
 			// success
 			answers++
 		} else {
