@@ -45,31 +45,77 @@ session_start();
 //     }
 
 if (
-  isset($_POST["username"]) &&
+  isset($_SESSION["username"]) &&
   isset($_POST["password"]) &&
+  isset($_POST["new_password"]) &&
   isset($_POST["gender"]) &&
   isset($_POST["city"]) &&
   isset($_POST["birthday"]) &&
   isset($_POST["education"]) &&
   isset($_POST["difficulty"])
 ) {
-  $username = mysqli_real_escape_string($link, $_POST['username']);
+  $username = mysqli_real_escape_string($link, $_SESSION['username']);
   $password = mysqli_real_escape_string($link, $_POST['password']);
-  $gender = mysqli_real_escape_string($link, $_POST['gender']);
-  $city = mysqli_real_escape_string($link, $_POST['city']);
-  $birthday = mysqli_real_escape_string($link, $_POST['birthday']);
-  $education = mysqli_real_escape_string($link, $_POST['education']);
-  $difficulty = mysqli_real_escape_string($link, $_POST['difficulty']);
 
-  if (empty($username) || empty($password) || empty($gender) || empty($city) || empty($birthday) || empty($education) || empty($difficulty)) {
-    echo ("Please complete all fields on the form");
+  $sql = "SELECT 1 FROM user WHERE username='$username' and password='$password'";
+  $result = mysqli_query($link, $sql) or die(mysqli_error($link));
+  $count = mysqli_num_rows($result);
+
+  if ($count != 1) {
+    echo("Wrong password :'(");
     exit();
   }
 
+  $flag = false;
+  $sql = "UPDATE user SET ";
+
+  $new_password = mysqli_real_escape_string($link, $_POST['new_password']);
+  if (!empty($new_password)) {
+    $sql = $sql."password = '$new_password', ";
+    flag = true;
+  }
+
+  $gender = mysqli_real_escape_string($link, $_POST['gender']);
+  if (!empty($gender)) {
+    $sql = $sql."gender = '$gender', ";
+    flag = true;
+  }
+
+  $city = mysqli_real_escape_string($link, $_POST['city']);
+  if (!empty($city)) {
+    $sql = $sql."city = '$city', ";
+    flag = true;
+  }
+
+  $birthday = mysqli_real_escape_string($link, $_POST['birthday']);
+  if (!empty($birthday)) {
+    $sql = $sql."birthday = '$birthday', ";
+    flag = true;
+  }
+
+  $education = mysqli_real_escape_string($link, $_POST['education']);
+  if (!empty($education)) {
+    $sql = $sql."education = '$education', ";
+    flag = true;
+  }
+
+  $difficulty = mysqli_real_escape_string($link, $_POST['difficulty']);
+  if (!empty($difficulty)) {
+    $sql = $sql."difficulty = '$difficulty', ";
+    flag = true;
+  }
+
+  if (!$flag) {
+    echo ("No data was sent to be updated");
+    exit();
+  }
+
+  if (substr($sql, -2) == ", ") $sql = substr($sql, 0, -2);
+  sql += " WHERE username='$username'";
+
   mysqli_autocommit($link, false);
 
-  $sql = "INSERT INTO user (username, password, gender, city, birthdate, education, difficulty) VALUES ('$username', '$password', '$gender', '$city', '$birthday', '$education', $difficulty)";
-  $result = mysqli_query($link, $sql);
+  $result = mysqli_query($link, $sql) or die(mysqli_error($link));
 
   if ($result) {
     mysqli_commit($link);

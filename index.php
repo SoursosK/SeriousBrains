@@ -90,15 +90,7 @@ if (!isset($_SESSION["username"])) {
   <!-- Bootstrap core JavaScript -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.slim.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.js"></script>
-  
-  <script type="text/javascript">
-    $(".datetime").datepicker({
-      format: 'yyyy-mm-dd'
-    });
-  </script>
 
   <!-- Menu Toggle Script -->
   <script>
@@ -129,6 +121,9 @@ if (!isset($_SESSION["username"])) {
       xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
           document.getElementById("content").innerHTML = this.responseText;
+          $(".datetime").datepicker({
+            format: 'yyyy-mm-dd'
+          });
         }
       };
 
