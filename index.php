@@ -81,6 +81,25 @@ if (!isset($_SESSION["username"])) {
         <p>If you ever want to change your profile settings, view your statistics or rate our platform, <br>be sure to check the drop down menu under your name at the top right corner!</p>
         <br>
         <h1 class="mt-4">Game Instructions:</h1>
+        <h2 class="mt-4">Find The Odd One Out:</h2>
+        <p>The aim of the Puzzle game is to place the fragmented image back to it's former state. Depending on the difficulty level, the image may be broken up to 4, 6 or 8 pieces.<br>
+           Please choose the piece you want to place first, and then click the destination square. You will have 2 and a half minutes to complete the game.
+        </p>
+        <h2 class="mt-4">Labyrinth:</h2>
+        <p>
+          The aim of the Labyrinth game is to move the blue square and reach the green circle, following the correct path through the maze. Depending on the difficulty level,<br>
+          the labyrinth's complexity may be higher. You can move the blue square using the arrow keys. Yoy will have 1 minute and a half to complete the game.
+        </p>
+        <h2 class="mt-4">Matching Sounds:</h2>
+        <p>
+          The aim of the MatchingSounds game is to choose the image, to which the sound playing belongs to. Depending on the difficylty level,<br>
+          the images from which you will have to choose from increase. You will have 30 seconds to complete the game.
+        </p>
+        <h2 class="mt-4">Puzzle Game:</h2>
+        <p>
+          The aim of the Puzzle game is to place the fragmented image back to it's former state. Depending on the difficulty level, the image may be broken up to 4, 6 or 8 pieces.<br> 
+          Please choose the piece you want to place first, and then click the destination square. You will have 2 and a half minutes to complete the game.
+        </p>
       </div>
     </div>
     <!-- /#page-content-wrapper -->
@@ -392,14 +411,9 @@ if (!isset($_SESSION["username"])) {
   </script>
 
   <!-- AJAX Get Requests -->
-
-
 </body>
 
 </html>
-
-
-
 
 <script>
   function postGameStats(gameid, hit, miss, quit, score, accuracy, avgspeed, playtime, starttimestamp, endtimestamp) {
@@ -417,5 +431,9 @@ if (!isset($_SESSION["username"])) {
     xhttp.open("POST", "postGameStats.php", true);
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xhttp.send("gameid=" + gameid + "&hit=" + hit + "&miss=" + miss + "&quit=" + quit + "&score=" + score + "&accuracy=" + accuracy + "&avgspeed=" + avgspeed + "&playtime=" + playtime + "&starttimestamp=" + starttimestamp + "&endtimestamp=" + endtimestamp);
+  }
+
+  function stop(gameid){
+    postGameStats(gameid, 0, 0, 1, 0, 0, 0, 0, 0, 0);
   }
 </script>
