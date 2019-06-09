@@ -65,7 +65,7 @@ if (
   $sql .= "INSERT INTO surveyanswer(qid, answer, userid, loginid) VALUES (6, $a6, (SELECT userid FROM user WHERE username='$username'), $loginid);";
   $sql .= "INSERT INTO surveyanswer(qid, answer, userid, loginid) VALUES (7, $a7, (SELECT userid FROM user WHERE username='$username'), $loginid);";
   $sql .= "INSERT INTO surveyanswer(qid, answer, userid, loginid) VALUES (8, $a8, (SELECT userid FROM user WHERE username='$username'), $loginid);";
-  $sql .= "INSERT INTO surveyanswer(qid, answer, userid, loginid) VALUES (8, $a9, (SELECT userid FROM user WHERE username='$username'), $loginid);";
+  $sql .= "INSERT INTO surveyanswer(qid, answer, userid, loginid) VALUES (9, $a9, (SELECT userid FROM user WHERE username='$username'), $loginid);";
   $sql .= "INSERT INTO surveyanswer(qid, answer, userid, loginid) VALUES (10, $a10, (SELECT userid FROM user WHERE username='$username'), $loginid);";
 
   $flag = true;

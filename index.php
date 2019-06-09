@@ -36,12 +36,10 @@ if (!isset($_SESSION["username"])) {
     <div class="bg-light border-right" id="sidebar-wrapper">
       <div class="sidebar-heading">Serious Brains </div>
       <div class="list-group list-group-flush">
-        <a class="list-group-item list-group-item-action bg-light">Dashboard</a>
-        <a class="list-group-item list-group-item-action bg-light">Shortcuts</a>
-        <a class="list-group-item list-group-item-action bg-light">Overview</a>
-        <a class="list-group-item list-group-item-action bg-light">Events</a>
-        <a class="list-group-item list-group-item-action bg-light">Profile</a>
-        <a class="list-group-item list-group-item-action bg-light">Status</a>
+        <a class="list-group-item list-group-item-action bg-light" onclick="FindTheOddOneOut()">Find The Odd One Out</a>
+        <a class="list-group-item list-group-item-action bg-light" onclick="Maze()">Maze</a>
+        <a class="list-group-item list-group-item-action bg-light" onclick="SoundMatching()">Sound Matching</a>
+        <a class="list-group-item list-group-item-action bg-light" onclick="">Matching Cards</a>
       </div>
     </div>
     <!-- /#sidebar-wrapper -->
@@ -100,6 +98,21 @@ if (!isset($_SESSION["username"])) {
     });
   </script>
 
+
+  <!-- Requirements for the FindTheOddOneOut Game -->
+  <script src="http://localhost/SeriousBrains/Games/Find the Odd One Out/functions.js"></script>
+
+
+  <!-- Requirements for the Maze Game -->
+  <script src="http://localhost/SeriousBrains/Games/Maze/maps.js"></script>
+
+
+  <!-- Requirements for the SoundMatching Game -->
+
+  <script src="http://localhost/SeriousBrains/Games/Sound Matching/functions2.js"></script>
+
+
+
   <script>
     function pass() {
       if (!document.getElementById('change_password').checked) {
@@ -115,6 +128,8 @@ if (!isset($_SESSION["username"])) {
     }
   </script>
 
+
+  <!-- Content AJAX filling -->
   <script>
     function userSettings() {
       var xhttp = new XMLHttpRequest();
@@ -146,6 +161,49 @@ if (!isset($_SESSION["username"])) {
     }
   </script>
 
+  <script>
+    function FindTheOddOneOut() {
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          document.getElementById("content").innerHTML = this.responseText;
+        }
+      };
+
+      xhttp.open("GET", "FindTheOddOneOut.html", true);
+      xhttp.send();
+    }
+  </script>
+
+  <script>
+    function Maze() {
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          document.getElementById("content").innerHTML = this.responseText;
+        }
+      };
+
+      xhttp.open("GET", "Maze.php", true);
+      xhttp.send();
+    }
+  </script>
+
+  <script>
+    function SoundMatching() {
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          document.getElementById("content").innerHTML = this.responseText;
+        }
+      };
+
+      xhttp.open("GET", "SoundMatching.html", true);
+      xhttp.send();
+    }
+  </script>
+
+  <!-- AJAX Post Requests -->
   <script>
     function updateProfile() {
       if (document.getElementById("new_password").value != document.getElementById("conf_password").value) {
@@ -187,7 +245,7 @@ if (!isset($_SESSION["username"])) {
     }
   </script>
 
-<script>
+  <script>
     function submitReview() {
       var q1;
       if (document.getElementById("q11").checked) q1 = 1;
@@ -316,6 +374,31 @@ if (!isset($_SESSION["username"])) {
     }
   </script>
 
+  <!-- AJAX Get Requests -->
+  
+
 </body>
 
 </html>
+
+
+
+
+<script>
+  function postGameStats(gameid ,hit, miss, quit, score, accuracy, avgspeed, playtime, starttimestamp, endtimestamp) {
+    var xhttp = new XMLHttpRequest();
+
+    // console.log(hit, miss, quit, score, accuracy, avgspeed, playtime, starttimestamp, endtimestamp);
+
+    // xhttp.onreadystatechange = function() {
+    //   if (this.readyState == 4 && this.status == 200) {
+    //     console.log(this.responseText);
+
+    //   }
+    // };
+
+    xhttp.open("POST", "postGameStats.php", true);
+    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhttp.send("gameid=" + gameid + "&hit=" + hit + "&miss=" + miss + "&quit=" + quit + "&score=" + score + "&accuracy=" + accuracy + "&avgspeed=" + avgspeed + "&playtime=" + playtime + "&starttimestamp=" + starttimestamp + "&endtimestamp=" + endtimestamp);
+  }
+</script>
