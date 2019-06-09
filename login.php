@@ -7,13 +7,34 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
   $username = mysqli_real_escape_string($link, $_POST['username']);
   $password = mysqli_real_escape_string($link, $_POST['password']);
 
+  mysqli_autocommit($link, false);
+
   $sql = "SELECT 1 FROM user WHERE username='$username' and password='$password'";
   $result = mysqli_query($link, $sql) or die(mysqli_error($link));
   $count = mysqli_num_rows($result);
 
   if ($count == 1) {
-    $_SESSION['username'] = $username;
-    echo ("Success");
+    $sql = "INSERT INTO login (userid) VALUES ((SELECT userid FROM user WHERE username='$username'))";
+    $result = mysqli_query($link, $sql);
+
+    if ($result) {
+      mysqli_commit($link);
+
+      $sql = "SELECT loginid FROM login WHERE userid=((SELECT userid FROM user WHERE username='$username')) ORDER BY date DESC LIMIT 1";
+      $loginid = mysqli_query($link, $sql);
+
+      if ($loginid) {
+        $_SESSION['username'] = $username;
+        $_SESSION['loginid'] = mysqli_fetch_array($loginid)[0];
+        echo ("Success");
+      } else {
+        mysqli_rollback($link);
+        echo ("Unexpected Error");
+      }
+    } else {
+      mysqli_rollback($link);
+      echo ("Unexpected Error");
+    }
   } else {
     echo ("Wrong Credentials");
   }

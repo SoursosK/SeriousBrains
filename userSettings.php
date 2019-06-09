@@ -3,47 +3,6 @@ include "connect.php";
 
 session_start();
 
-// $query = "select * from user where username='".$_SESSION['username']."'";
-// $result = mysqli_query($link, $query) or die(mysqli_error($link));
-// $count = mysqli_num_rows($result);
-
-// if ($count == 1) {
-//         $row = mysqli_fetch_assoc($result);
-//         $gender = $row['gender'];
-// }
-
-
-// mysqli_autocommit($link, false);
-// $query = "";
-
-// if (!empty($_POST["gender"])){
-//     $query = "update user set gender=''$_POST["gender"]'' where username=''$_POST["username"]''"; 
-// }
-// if (!empty($_POST["city"])){
-//     $query = "update user set city=''$_POST["city"]'' where username=''$_POST["username"]''"; 
-// }
-// if (!empty($_POST["birthdate"])){
-//     $query = "update user set birthdate=''$_POST["birthdate"]'' where username=''$_POST["username"]''"; 
-// }
-// if (!empty($_POST["education"])){
-//     $query = "update user set education=''$_POST["education"]'' where username=''$_POST["username"]''"; 
-// }
-// if (!empty($_POST["difficulty"])){
-//     $query = "update user set difficulty='.$_POST['difficulty'].' where username='.$_POST['username'].'"; 
-// }
-
-// $result = mysqli_query($link, $query);
-
-//     if ($result) {
-//         mysqli_commit($link);
-//         send_message('Τα στοιχεία σας καταχωρήθηκαν με επιτυχία.', 'success');
-//         header(" Location: index . php ");
-//         exit();
-//     } else {
-//         mysqli_rollback($link);
-//         send_message('Τα στοιχεία δεν καταχωρήθηκαν λόγω προβλήματος στην βάση του συστήματος.', 'error');
-//     }
-
 if (
   isset($_SESSION["username"]) &&
   isset($_POST["new_password"]) &&
@@ -133,8 +92,6 @@ if (
   ?>
 
   <link rel="stylesheet" type="text/css" href="css/settings.css">
-  <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.css" />
 
   <div class="container">
     <div class="card-body">

@@ -141,7 +141,7 @@ if (!isset($_SESSION["username"])) {
         }
       };
 
-      xhttp.open("GET", "form.html", true);
+      xhttp.open("GET", "review.php", true);
       xhttp.send();
     }
   </script>
@@ -153,7 +153,6 @@ if (!isset($_SESSION["username"])) {
         return;
       }
 
-      //var username = $_SESSION["username"];
       var new_password = document.getElementById("new_password").value;
       var gender = document.getElementById("gender").value;
       var city = document.getElementById("city").value;
@@ -185,6 +184,135 @@ if (!isset($_SESSION["username"])) {
       xhttp.open("POST", "userSettings.php", true);
       xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
       xhttp.send("new_password=" + new_password + "&gender=" + gender + "&city=" + city + "&birthday=" + birthday + "&education=" + education + "&difficulty=" + difficulty + "&old_password=" + old_password);
+    }
+  </script>
+
+<script>
+    function submitReview() {
+      var q1;
+      if (document.getElementById("q11").checked) q1 = 1;
+      else if (document.getElementById("q12").checked) q1 = 2;
+      else if (document.getElementById("q13").checked) q1 = 3;
+      else if (document.getElementById("q14").checked) q1 = 4;
+      else if (document.getElementById("q15").checked) q1 = 5;
+      else {
+        document.getElementById("error").innerHTML = "Invalid arguments!!";
+        return;
+      }
+
+      var q2;
+      if (document.getElementById("q21").checked) q2 = 1;
+      else if (document.getElementById("q22").checked) q2 = 2;
+      else if (document.getElementById("q23").checked) q2 = 3;
+      else if (document.getElementById("q24").checked) q2 = 4;
+      else if (document.getElementById("q25").checked) q2 = 5;
+      else {
+        document.getElementById("error").innerHTML = "Invalid arguments!!";
+        return;
+      }
+
+      var q3;
+      if (document.getElementById("q31").checked) q3 = 1;
+      else if (document.getElementById("q32").checked) q3 = 2;
+      else if (document.getElementById("q33").checked) q3 = 3;
+      else if (document.getElementById("q34").checked) q3 = 4;
+      else if (document.getElementById("q35").checked) q3 = 5;
+      else {
+        document.getElementById("error").innerHTML = "Invalid arguments!!";
+        return;
+      }
+
+      var q4;
+      if (document.getElementById("q41").checked) q4 = 1;
+      else if (document.getElementById("q42").checked) q4 = 2;
+      else if (document.getElementById("q43").checked) q4 = 3;
+      else if (document.getElementById("q44").checked) q4 = 4;
+      else if (document.getElementById("q45").checked) q4 = 5;
+      else {
+        document.getElementById("error").innerHTML = "Invalid arguments!!";
+        return;
+      }
+
+      var q5;
+      if (document.getElementById("q51").checked) q5 = 1;
+      else if (document.getElementById("q52").checked) q5 = 2;
+      else if (document.getElementById("q53").checked) q5 = 3;
+      else if (document.getElementById("q54").checked) q5 = 4;
+      else if (document.getElementById("q55").checked) q5 = 5;
+      else {
+        document.getElementById("error").innerHTML = "Invalid arguments!!";
+        return;
+      }
+
+      var q6;
+      if (document.getElementById("q61").checked) q6 = 1;
+      else if (document.getElementById("q62").checked) q6 = 2;
+      else if (document.getElementById("q63").checked) q6 = 3;
+      else if (document.getElementById("q64").checked) q6 = 4;
+      else if (document.getElementById("q65").checked) q6 = 5;
+      else {
+        document.getElementById("error").innerHTML = "Invalid arguments!!";
+        return;
+      }
+
+      var q7;
+      if (document.getElementById("q71").checked) q7 = 1;
+      else if (document.getElementById("q72").checked) q7 = 2;
+      else if (document.getElementById("q73").checked) q7 = 3;
+      else if (document.getElementById("q74").checked) q7 = 4;
+      else if (document.getElementById("q75").checked) q7 = 5;
+      else {
+        document.getElementById("error").innerHTML = "Invalid arguments!!";
+        return;
+      }
+
+      var q8;
+      if (document.getElementById("q81").checked) q8 = 1;
+      else if (document.getElementById("q82").checked) q8 = 2;
+      else if (document.getElementById("q83").checked) q8 = 3;
+      else if (document.getElementById("q84").checked) q8 = 4;
+      else if (document.getElementById("q85").checked) q8 = 5;
+      else {
+        document.getElementById("error").innerHTML = "Invalid arguments!!";
+        return;
+      }
+
+      var q9;
+      if (document.getElementById("q91").checked) q9 = 1;
+      else if (document.getElementById("q92").checked) q9 = 2;
+      else if (document.getElementById("q93").checked) q9 = 3;
+      else if (document.getElementById("q94").checked) q9 = 4;
+      else if (document.getElementById("q95").checked) q9 = 5;
+      else {
+        document.getElementById("error").innerHTML = "Invalid arguments!!";
+        return;
+      }
+
+      var q10;
+      if (document.getElementById("q101").checked) q10 = 1;
+      else if (document.getElementById("q102").checked) q10 = 2;
+      else if (document.getElementById("q103").checked) q10 = 3;
+      else if (document.getElementById("q104").checked) q10 = 4;
+      else if (document.getElementById("q105").checked) q10 = 5;
+      else {
+        document.getElementById("error").innerHTML = "Invalid arguments!!";
+        return;
+      }
+
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          document.getElementById("error").innerHTML = this.responseText;
+          if (document.getElementById("error").innerHTML.trim() == "Success")
+            document.getElementById("error").style.color = "LimeGreen";
+          else
+            document.getElementById("error").style.color = "Red";
+        }
+      };
+
+      xhttp.open("POST", "review.php", true);
+      xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      xhttp.send("q1=" + q1 + "&q2=" + q2 + "&q3=" + q3 + "&q4=" + q4 + "&q5=" + q5 + "&q6=" + q6 + "&q7=" + q7 + "&q8=" + q8 + "&q9=" + q9 + "&q10=" + q10);
     }
   </script>
 
