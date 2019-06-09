@@ -3,73 +3,78 @@ include "connect.php";
 
 session_start();
 
-// $query = "select * from user where username='".$_SESSION['username']."'";
-// $result = mysqli_query($link, $query) or die(mysqli_error($link));
-// $count = mysqli_num_rows($result);
-
-// if ($count == 1) {
-//         $row = mysqli_fetch_assoc($result);
-//         $gender = $row['gender'];
-// }
-
-
-// mysqli_autocommit($link, false);
-// $query = "";
-
-// if (!empty($_POST["gender"])){
-//     $query = "update user set gender=''$_POST["gender"]'' where username=''$_POST["username"]''"; 
-// }
-// if (!empty($_POST["city"])){
-//     $query = "update user set city=''$_POST["city"]'' where username=''$_POST["username"]''"; 
-// }
-// if (!empty($_POST["birthdate"])){
-//     $query = "update user set birthdate=''$_POST["birthdate"]'' where username=''$_POST["username"]''"; 
-// }
-// if (!empty($_POST["education"])){
-//     $query = "update user set education=''$_POST["education"]'' where username=''$_POST["username"]''"; 
-// }
-// if (!empty($_POST["difficulty"])){
-//     $query = "update user set difficulty=''$_POST["difficulty"]'' where username=''$_POST["username"]''"; 
-// }
-
-// $result = mysqli_query($link, $query);
-
-//     if ($result) {
-//         mysqli_commit($link);
-//         send_message('Τα στοιχεία σας καταχωρήθηκαν με επιτυχία.', 'success');
-//         header(" Location: index . php ");
-//         exit();
-//     } else {
-//         mysqli_rollback($link);
-//         send_message('Τα στοιχεία δεν καταχωρήθηκαν λόγω προβλήματος στην βάση του συστήματος.', 'error');
-//     }
-
 if (
-  isset($_POST["username"]) &&
-  isset($_POST["password"]) &&
+  isset($_SESSION["username"]) &&
+  isset($_POST["new_password"]) &&
   isset($_POST["gender"]) &&
   isset($_POST["city"]) &&
   isset($_POST["birthday"]) &&
   isset($_POST["education"]) &&
-  isset($_POST["difficulty"])
+  isset($_POST["difficulty"]) &&
+  isset($_POST["old_password"]) 
 ) {
-  $username = mysqli_real_escape_string($link, $_POST['username']);
-  $password = mysqli_real_escape_string($link, $_POST['password']);
-  $gender = mysqli_real_escape_string($link, $_POST['gender']);
-  $city = mysqli_real_escape_string($link, $_POST['city']);
-  $birthday = mysqli_real_escape_string($link, $_POST['birthday']);
-  $education = mysqli_real_escape_string($link, $_POST['education']);
-  $difficulty = mysqli_real_escape_string($link, $_POST['difficulty']);
+  $username = mysqli_real_escape_string($link, $_SESSION['username']);
+  $password = mysqli_real_escape_string($link, $_POST['old_password']);
 
-  if (empty($username) || empty($password) || empty($gender) || empty($city) || empty($birthday) || empty($education) || empty($difficulty)) {
-    echo ("Please complete all fields on the form");
+  $query = "SELECT 1 FROM user WHERE username='$username' and password='$password'";
+  $result = mysqli_query($link, $query) or die(mysqli_error($link));
+  $count = mysqli_num_rows($result);
+
+  if ($count != 1) {
+    echo("Wrong password :'(");
     exit();
   }
 
+  $flag = false;
+  $query = "UPDATE user SET ";
+
+  $new_password = mysqli_real_escape_string($link, $_POST['new_password']);
+  if (!empty($new_password)) {
+    $query = $query."password = '$new_password', ";
+    $flag = true;
+  }
+
+  $gender = mysqli_real_escape_string($link, $_POST['gender']);
+  if (!empty($gender)) {
+    $query = $query."gender = '$gender', ";
+    $flag = true;
+  }
+
+  $city = mysqli_real_escape_string($link, $_POST['city']);
+  if (!empty($city)) {
+    $query = $query."city = '$city', ";
+    $flag = true;
+  }
+
+  $birthday = mysqli_real_escape_string($link, $_POST['birthday']);
+  if (!empty($birthday)) {
+    $query = $query."birthdate = '$birthday', ";
+    $flag = true;
+  }
+
+  $education = mysqli_real_escape_string($link, $_POST['education']);
+  if (!empty($education)) {
+    $query = $query."education = '$education', ";
+    $flag = true;
+  }
+
+  $difficulty = mysqli_real_escape_string($link, $_POST['difficulty']);
+  if (!empty($difficulty)) {
+    $query = $query."difficulty = '$difficulty', ";
+    $flag = true;
+  }
+
+  if (!$flag) {
+    echo ("No data was sent to be updated");
+    exit();
+  }
+
+  if (substr($query, -2) == ", ") $query = substr($query, 0, -2);
+  $query = $query." WHERE username='$username'";
+
   mysqli_autocommit($link, false);
 
-  $sql = "INSERT INTO user (username, password, gender, city, birthdate, education, difficulty) VALUES ('$username', '$password', '$gender', '$city', '$birthday', '$education', $difficulty)";
-  $result = mysqli_query($link, $sql);
+  $result = mysqli_query($link, $query) or die(mysqli_error($link));
 
   if ($result) {
     mysqli_commit($link);
@@ -81,14 +86,12 @@ if (
 } elseif (isset($_SESSION["username"])) {
   $username = mysqli_real_escape_string($link, $_SESSION['username']);
 
-  $sql = "SELECT * FROM user WHERE username='$username'";
-  $result = mysqli_query($link, $sql) or die(mysqli_error($link));
+  $query = "SELECT * FROM user WHERE username='$username'";
+  $result = mysqli_query($link, $query) or die(mysqli_error($link));
   $row=mysqli_fetch_array($result);
   ?>
 
   <link rel="stylesheet" type="text/css" href="css/settings.css">
-  <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.css" />
 
   <div class="container">
     <div class="card-body">
@@ -168,26 +171,26 @@ if (
           <div class="custom-control custom-radio custom-control-inline">
             <input type="radio" class="custom-control-input" id="difficulty4" name="difficulty"
             <?php if ($row["difficulty"] == 4) echo 'checked="true"';?>>
-            <label class="custom-control-label" for="difficulty4">Gradual (Easy - Advanced)</label>
+            <label class="custom-control-label" for="difficulty4">Gradual (Easy - Intermediate)</label>
           </div>
 
           <!-- Default inline 5-->
           <div class="custom-control custom-radio custom-control-inline">
             <input type="radio" class="custom-control-input" id="difficulty5" name="difficulty"
             <?php if ($row["difficulty"]== 5) echo 'checked="true"';?>>
-            <label class="custom-control-label" for="difficulty5">Gradual (Easy - Intermediate)</label>
+            <label class="custom-control-label" for="difficulty5">Gradual (Easy - Advanced)</label>
           </div>
         </div>
 
-        <div id="error" class="form-label-group text-center" style="color:red;">
+        <div id="error" class="form-label-group text-center">
         </div>
 
         <div class="form-label-group">
-          <input type="password" id="password" class="form-control" placeholder="Password" required>
-          <label for="password">Confirm Current Password</label>
+          <input type="password" id="old_password" class="form-control" placeholder="Password" required autofocus>
+          <label for="old_password">Confirm Current Password</label>
         </div>
 
-        <button class="btn btn-lg btn-primary btn-block" onclick="registerCredentials()">Update Info</button>
+        <button class="btn btn-lg btn-primary btn-block" onclick="updateProfile()">Update Info</button>
       </div>
     </div>
   </div>
@@ -197,3 +200,4 @@ if (
   header("Location: index.php");
 }
 ?>
+
