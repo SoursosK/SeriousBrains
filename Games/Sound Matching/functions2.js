@@ -154,7 +154,7 @@ function playRound2(r) {
 
 function init2(r) {
 
-    $('.form').remove();
+    $('.form').html('<button onclick="stop()">Stop</button>');
     $('.stage > div').html('');
     $('.success, .failed').hide();
 

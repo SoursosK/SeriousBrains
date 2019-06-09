@@ -10,7 +10,7 @@ if (!isset($_SESSION["username"])) {
 <html lang="en">
 
 <head>
-
+  <link rel='icon' href='favicon.ico' type='image/x-icon' />
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
@@ -65,9 +65,10 @@ if (!isset($_SESSION["username"])) {
               </a>
               <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                 <a class="dropdown-item" onclick="userSettings()">User Settings</a>
+                <div class="dropdown-divider"></div>
                 <a class="dropdown-item" onclick="review()">Review Website</a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item">Something else here</a>
+                <a class="dropdown-item" onclick="showStatistics()">Statistics</a>
               </div>
             </li>
           </ul>
@@ -75,9 +76,11 @@ if (!isset($_SESSION["username"])) {
       </nav>
 
       <div class="container-fluid" id="content">
-        <h1 class="mt-4">Simple Sidebar</h1>
-        <p>The starting state of the menu will appear collapsed on smaller screens, and will appear non-collapsed on larger screens. When toggled using the button below, the menu will change.</p>
-        <p>Make sure to keep all page content within the <code>#page-content-wrapper</code>. The top navbar is optional, and just for demonstration. Just create an element with the <code>#menu-toggle</code> ID which will toggle the menu when clicked.</p>
+        <h1 class="mt-4">Welcome to Serious Brains!</h1>
+        <p>You can choose which game you want to play from the Games Menu.</p>
+        <p>If you ever want to change your profile settings, view your statistics or rate our platform, <br>be sure to check the drop down menu under your name at the top right corner!</p>
+        <br>
+        <h1 class="mt-4">Game Instructions:</h1>
       </div>
     </div>
     <!-- /#page-content-wrapper -->
@@ -199,6 +202,20 @@ if (!isset($_SESSION["username"])) {
       };
 
       xhttp.open("GET", "SoundMatching.html", true);
+      xhttp.send();
+    }
+  </script>
+
+  <script>
+    function showStatistics() {
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          document.getElementById("content").innerHTML = this.responseText;
+        }
+      };
+
+      xhttp.open("GET", "statistics.php", true);
       xhttp.send();
     }
   </script>
@@ -375,7 +392,7 @@ if (!isset($_SESSION["username"])) {
   </script>
 
   <!-- AJAX Get Requests -->
-  
+
 
 </body>
 
@@ -385,7 +402,7 @@ if (!isset($_SESSION["username"])) {
 
 
 <script>
-  function postGameStats(gameid ,hit, miss, quit, score, accuracy, avgspeed, playtime, starttimestamp, endtimestamp) {
+  function postGameStats(gameid, hit, miss, quit, score, accuracy, avgspeed, playtime, starttimestamp, endtimestamp) {
     var xhttp = new XMLHttpRequest();
 
     // console.log(hit, miss, quit, score, accuracy, avgspeed, playtime, starttimestamp, endtimestamp);
