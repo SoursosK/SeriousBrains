@@ -1,11 +1,11 @@
 ﻿var timerFunction;
 var p1;
 var images = [
-                { src: 'Games/MatchingCards/images/london-bridge.jpg', title: 'London Bridge' },
-                { src: 'Games/MatchingCards/images/lotus-temple.jpg', title: 'Lotus Temple' },
-                { src: 'Games/MatchingCards/images/qutub-minar.jpg', title: 'Qutub Minar' },
-                { src: 'Games/MatchingCards/images/statue-of-liberty.jpg', title: 'Statue Of Liberty' },
-                { src: 'Games/MatchingCards/images/taj-mahal.jpg', title: 'Taj Mahal' }
+                { src: 'Games/Puzzle/images/london-bridge.jpg', title: 'London Bridge' },
+                { src: 'Games/Puzzle/images/lotus-temple.jpg', title: 'Lotus Temple' },
+                { src: 'Games/Puzzle/images/qutub-minar.jpg', title: 'Qutub Minar' },
+                { src: 'Games/Puzzle/images/statue-of-liberty.jpg', title: 'Statue Of Liberty' },
+                { src: 'Games/Puzzle/images/taj-mahal.jpg', title: 'Taj Mahal' }
             ];
 var imagePuzzle = {
     stepCount: 0,

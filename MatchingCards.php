@@ -9,8 +9,7 @@ $result = mysqli_query($link, $query);
 $level = mysqli_fetch_array($result)[0];
 
 ?>
-<link href="Games/Puzzle/css/style.css" rel="stylesheet" />
-<link href="Games/Puzzle/css/image-puzzle.css" rel="stylesheet" />
+<link href="Games/Puzzle/css/image-puzzle2.css" rel="stylesheet" />
 
 <div id="collage">
     <h2>Image Puzzle</h2>

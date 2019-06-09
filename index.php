@@ -39,7 +39,7 @@ if (!isset($_SESSION["username"])) {
         <a class="list-group-item list-group-item-action bg-light" onclick="FindTheOddOneOut()">Find The Odd One Out</a>
         <a class="list-group-item list-group-item-action bg-light" onclick="Maze()">Maze</a>
         <a class="list-group-item list-group-item-action bg-light" onclick="SoundMatching()">Sound Matching</a>
-        <a class="list-group-item list-group-item-action bg-light" onclick="MatchingCards()">Matching Cards</a>
+        <a class="list-group-item list-group-item-action bg-light" onclick="MatchingCards()">Puzzle</a>
       </div>
     </div>
     <!-- /#sidebar-wrapper -->
@@ -460,5 +460,6 @@ if (!isset($_SESSION["username"])) {
 
   function stop(gameid){
     postGameStats(gameid, 0, 0, 1, 0, 0, 0, 0, 0, 0);
+    header("Location: login.php");
   }
 </script>
