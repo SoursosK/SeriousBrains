@@ -39,7 +39,7 @@ if (!isset($_SESSION["username"])) {
         <a class="list-group-item list-group-item-action bg-light" onclick="FindTheOddOneOut()">Find The Odd One Out</a>
         <a class="list-group-item list-group-item-action bg-light" onclick="Maze()">Maze</a>
         <a class="list-group-item list-group-item-action bg-light" onclick="SoundMatching()">Sound Matching</a>
-        <a class="list-group-item list-group-item-action bg-light" onclick="">Matching Cards</a>
+        <a class="list-group-item list-group-item-action bg-light" onclick="MatchingCards()">Matching Cards</a>
       </div>
     </div>
     <!-- /#sidebar-wrapper -->
@@ -113,6 +113,17 @@ if (!isset($_SESSION["username"])) {
   <!-- Requirements for the SoundMatching Game -->
 
   <script src="http://localhost/SeriousBrains/Games/Sound Matching/functions2.js"></script>
+
+  
+  <script src="Games/Puzzle/js/image-puzzle.js"></script>
+
+
+
+  <!-- Moment.js library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+
+  <!-- moment-duration-format plugin -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-duration-format/1.3.0/moment-duration-format.min.js"></script>
 
 
 
@@ -188,6 +199,20 @@ if (!isset($_SESSION["username"])) {
       };
 
       xhttp.open("GET", "Maze.php", true);
+      xhttp.send();
+    }
+  </script>
+
+  <script>
+    function MatchingCards() {
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          document.getElementById("content").innerHTML = this.responseText;
+        }
+      };
+
+      xhttp.open("GET", "MatchingCards.php", true);
       xhttp.send();
     }
   </script>
