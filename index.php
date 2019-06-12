@@ -34,7 +34,7 @@ if (!isset($_SESSION["username"])) {
 
     <!-- Sidebar -->
     <div class="bg-light border-right" id="sidebar-wrapper">
-      <div class="sidebar-heading">Serious Brains </div>
+      <div class="sidebar-heading" onclick="location.href = 'http://localhost/SeriousBrains/index.php';">Serious Brains </div>
       <div class="list-group list-group-flush">
         <a class="list-group-item list-group-item-action bg-light" onclick="FindTheOddOneOut()">Find The Odd One Out</a>
         <a class="list-group-item list-group-item-action bg-light" onclick="Maze()">Maze</a>
@@ -460,6 +460,7 @@ if (!isset($_SESSION["username"])) {
 
   function stop(gameid){
     postGameStats(gameid, 0, 0, 1, 0, 0, 0, 0, 0, 0);
-    header("Location: login.php");
+    location.href = 'http://localhost/SeriousBrains/index.php';
   }
 </script>
+

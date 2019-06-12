@@ -17,7 +17,7 @@ if (
 ) {
     $gameid = mysqli_real_escape_string($link, $_POST['gameid']);
 
-    $query = "select userid from user where username = '" . $_SESSION["username"] . "'";
+    $query = "select userid from user where username = '".$_SESSION["username"]."'";
     $result = mysqli_query($link, $query);
     $userid = mysqli_fetch_array($result)[0];
 
@@ -29,7 +29,7 @@ if (
     $avgspeed = mysqli_real_escape_string($link, $_POST['avgspeed']);
     $playtime = mysqli_real_escape_string($link, $_POST['playtime']);
 
-    $query = "select difficulty from user where username = '" . $_SESSION["username"] . "'";
+    $query = "select difficulty from user where username = '".$_SESSION["username"]."'";
     $result = mysqli_query($link, $query);
     $level = mysqli_fetch_array($result)[0];
 
